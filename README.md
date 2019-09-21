@@ -6,16 +6,19 @@ This project was done as a case study on the effects that differing heuristics m
 Written in ```Python 2.6```. However, you may run the scripts with ```Python 3.7```, just change the import from ```Queue``` to ```queue```.
 
 #### Puzzle Solving Scripts
+Takes in puzzle in input_file, and writes move sequences as output into specified output_file.
 ```python
 python 8tile_heuristic1.py input_file output_file  #to use heuristic 1
 python 8tile_heuristic2.py input_file output_file  #to use heuristic 2
 ```
 #### Check solvable
 To avoid an unnecessarily long and meaningless attempt to solve a potentially unsolvable puzzle, it is best to check whether puzzle is solvable before running ```8tile_*.py``` by counting the number of inversions, using ```helper_scripts/check_solvable.py```
+Prints ```True``` if puzzle in input_file is solvable. Prints ```False``` otherwise.
 ```python
 python check_solvable.py input_file
 ```
 #### Validate moves
+Prints ```True``` if sequence of moves in moves_output solves the puzzle. Prints ```False``` otherwise.
 ```python
 python move_executor.py input_file moves_output
 ```
