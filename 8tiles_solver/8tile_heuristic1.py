@@ -18,7 +18,7 @@ class Puzzle(object):
                                "RIGHT": "LEFT"}
         self.frontier = PriorityQueue()
         self.visited = set()
-        
+
     def solve(self):
         '''
         A* search
@@ -30,7 +30,7 @@ class Puzzle(object):
         # returns an empty list of actions if start state is already the goal state
         if self.goal_test(self.init_state, self.goal_state):
             return []
-        
+
         self.frontier.put((self.get_heuristic(self.init_state),\
             Node(self.clone_state(self.init_state), 0, [])))
 
@@ -47,12 +47,12 @@ class Puzzle(object):
                 print("Number of nodes generated: " + str(num_of_nodes_generated))
                 print("Maximum size of frontier: " + str(max_frontier_size))
                 return curr_node.actions
-            
+
             hashable = self.make_hashable_state(curr_state)
             self.visited.add(hashable)
-            
+
             g = curr_node.g
-            
+
             # don't add node into frontier if it already requires 300 moves
             # since it is meaningless to explore... assignment dictates <= 300 moves
             if g >= 300:
@@ -63,16 +63,16 @@ class Puzzle(object):
             # test the legal moves to heuristic
             for move_cmd in legal_moves:
                 new_state = self.move(curr_state, move_cmd, empty_i, empty_j)
-                
+
                 hashable = self.make_hashable_state(new_state)
                 if hashable in self.visited:
                     continue
-                
+
                 new_actions_lst = copy.copy(curr_node.actions)
                 new_actions_lst.append(move_cmd)
                 new_g = g + 1
                 new_f = new_g + self.get_heuristic(new_state)  #f(n) = g(n) + h(n)
-                
+
                 self.frontier.put((new_f, Node(new_state, new_g, new_actions_lst)))
                 num_of_nodes_generated += 1
                 frontier_size += 1
@@ -85,7 +85,7 @@ class Puzzle(object):
         for row in state:
             lst.append(tuple(row))
         return tuple(lst)
-    
+
     def clone_state(self, state):
         '''Takes in a state, and returns a copied state'''
         cloned_state = []
@@ -106,7 +106,7 @@ class Puzzle(object):
                     # calculate vertical displacement
                     manhattan_distance += abs(value % 3 - y)
         return manhattan_distance
-    
+
     def get_legal_moves(self, i, j):
         """
         Takes in coordinate of empty space, and use it to determine the current state
@@ -134,14 +134,14 @@ class Puzzle(object):
                                new_state[i + coordinate_change[0]][j + coordinate_change[1]]\
                                , new_state[i][j]
         return new_state
-        
+
     def find_empty_space(self, state):
         """Evaluates the state and returns index of empty space"""
         for i in range(3):
             for j in range(3):
                 if state[i][j] == 0:
                     return (i, j)
-        
+
     def goal_test(self, state, goal_state):
         """
         Compares the current state and the goal
@@ -153,7 +153,7 @@ class Puzzle(object):
                 if state[i][j] != goal_state[i][j]:
                     return False
         return True
-    
+
 # This class models the graph nodes within A* search
 class Node:
     def __init__(self, state, g, actions):
@@ -163,6 +163,9 @@ class Node:
 
     def __str__(self):
         return str(self.g) + " " + str(self.actions)
+
+    def __lt__(self, node_two):
+        return self.g < node_two.g
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
